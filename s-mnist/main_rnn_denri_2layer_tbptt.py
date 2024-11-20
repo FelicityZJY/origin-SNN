@@ -194,35 +194,12 @@ task = 'psmnist'
 
 
 def load_npz_files(data_folder,filename):
-    '''
-    train_images_list = []
-    train_labels_list = []
-    test_images_list = []
-    test_labels_list = []
-
-    for filename in os.listdir(data_folder):
-        if filename.endswith('.npz'):
-            file_path = os.path.join(data_folder, filename)
-            data = np.load(file_path)
-            
-            train_images_list.append(data['train_images'])
-            train_labels_list.append(data['train_labels'])
-            test_images_list.append(data['test_images'])
-            test_labels_list.append(data['test_labels'])
-
-    all_train_images = np.concatenate(train_images_list, axis=0)
-    all_train_labels = np.concatenate(train_labels_list, axis=0)
-    all_test_images = np.concatenate(test_images_list, axis=0)
-    all_test_labels = np.concatenate(test_labels_list, axis=0)
-    
-    return all_train_images, all_train_labels, all_test_images, all_test_labels
-    '''
     file_path = os.path.join(data_folder, filename)
     data = np.load(file_path)
     return data['train_images'],data['train_labels'],data['test_images'],data['test_labels']
 
-data_folder = '/n01dat01/jyzhou/DH-SNN/MedMNIST-main/data'
-train_images, train_labels, test_images, test_labels = load_npz_files(data_folder,sys.argv[1])
+data_folder = sys.argv[1]
+train_images, train_labels, test_images, test_labels = load_npz_files(data_folder,sys.argv[2])
 
 train_images = torch.tensor(train_images, dtype=torch.float32)
 train_labels = torch.tensor(train_labels, dtype=torch.long)
@@ -247,7 +224,7 @@ input_size=1
 stride = 1
 hidden_dims = [64,256] #network_size
 output_dim = max(train_labels)+1
-seq_dim = int(64*64 / input_dim)  # Number of steps to unroll
+seq_dim = int(28*28 / input_dim)  # Number of steps to unroll
 
 #perm 
 perm = torch.randperm(seq_dim)
